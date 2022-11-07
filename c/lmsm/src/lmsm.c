@@ -10,10 +10,19 @@
 //======================================================
 
 void lmsm_i_call(lmsm *our_little_machine) {
+    lmsm_stack *current =our_little_machine->accumulator;
+    our_little_machine->accumulator=our_little_machine->accumulator->next;
+    //lmsm_stack *current_pro =our_little_machine->call_stack;
+    our_little_machine->program_counter=our_little_machine->accumulator;
+
+
+    free(current);
+
 }
 
 void lmsm_i_return(lmsm *our_little_machine) {
-
+     our_little_machine->program_counter=our_little_machine->call_stack->value;
+     our_little_machine->call_stack=our_little_machine->call_stack->next;
 }
 
 void lmsm_i_push(lmsm *our_little_machine) {
@@ -25,7 +34,19 @@ void lmsm_i_push(lmsm *our_little_machine) {
 }
 
 void lmsm_i_pop(lmsm *our_little_machine) {
-    our_little_machine->call_stack->
+
+    lmsm_stack *current =our_little_machine->accumulator;
+    if(current->next){
+        lmsm_stack *new = malloc(sizeof(lmsm_stack));
+        new->value = current->next->value;
+        new->next=current->next->next;
+        our_little_machine->accumulator=new;
+    }else{
+        our_little_machine->status=STATUS_HALTED;
+        our_little_machine->error_code=ERROR_EMPTY_STACK;
+    }
+
+
 
 }
 
@@ -71,27 +92,104 @@ void lmsm_i_sadd(lmsm *our_little_machine) {
 }
 
 void lmsm_i_ssub(lmsm *our_little_machine) {
+
+    if (!check_stack(our_little_machine)) {
+        return;
+    }
+    lmsm_stack *current = our_little_machine->accumulator;
+    lmsm_stack *next = current->next;
+    lmsm_stack *new = malloc(sizeof(lmsm_stack));
+    new->value = next->value-current->value;
+    new->next = next->next;
+    our_little_machine->accumulator = new;
+
+    free(current);
+    free(next);
+
 }
 
 void lmsm_i_smax(lmsm *our_little_machine) {
+    if (!check_stack(our_little_machine)) {
+        return;
+    }
+    lmsm_stack *current = our_little_machine->accumulator;
+    lmsm_stack *next = current->next;
+    lmsm_stack *new;
+    new = malloc(sizeof(lmsm_stack));
+
+    if(current->value>next->value){
+        new->value=current->value;
+    }else{
+        new->value=next->value;
+    }
+    new->next = next->next;
+
+    our_little_machine->accumulator = new;
+
+    free(current);
+    free(next);
+
 }
 
 void lmsm_i_smin(lmsm *our_little_machine) {
+    if (!check_stack(our_little_machine)) {
+        return;
+    }
+    lmsm_stack *current = our_little_machine->accumulator;
+    lmsm_stack *next = current->next;
+    lmsm_stack *new;
+    new = malloc(sizeof(lmsm_stack));
+
+    if(current->value<next->value){
+        new->value=current->value;
+    }else{
+        new->value=next->value;
+    }
+    new->next = next->next;
+
+    our_little_machine->accumulator = new;
+
+    free(current);
+    free(next);
 }
 
 void lmsm_i_smul(lmsm *our_little_machine) {
+    if (!check_stack(our_little_machine)) {
+        return;
+    }
+    lmsm_stack *current = our_little_machine->accumulator;
+    lmsm_stack *next = current->next;
+    lmsm_stack *new = malloc(sizeof(lmsm_stack));
+    new->value = next->value*current->value;
+    new->next = next->next;
+    our_little_machine->accumulator = new;
+
+    free(current);
+    free(next);
 }
 
 void lmsm_i_sdiv(lmsm *our_little_machine) {
+    if (!check_stack(our_little_machine)) {
+        return;
+    }
+    lmsm_stack *current = our_little_machine->accumulator;
+    lmsm_stack *next = current->next;
+    lmsm_stack *new = malloc(sizeof(lmsm_stack));
+    new->value = next->value/current->value;
+    new->next = next->next;
+    our_little_machine->accumulator = new;
+
+    free(current);
+    free(next);
 }
 
 void lmsm_i_out(lmsm *our_little_machine) {
-    int i =0;
-    while(our_little_machine->output_buffer[i]!=NULL){
-    i++;
-    }
-    //char arr[] = our_little_machine->accumulator->value;
-        our_little_machine->output_buffer[i]=our_little_machine->accumulator->value;
+    char *out = our_little_machine->output_buffer;
+    int i = our_little_machine->accumulator->value;
+    char string[3];
+    sprintf(string,"%d",i);
+    strncat(out,string,100);
+    strncat(out," ",100);
 
 
 }
@@ -208,6 +306,16 @@ void lmsm_exec_instruction(lmsm *our_little_machine, int instruction) {
     }
     else if (instruction == 923) {
         lmsm_i_sadd(our_little_machine);
+    }else if (instruction == 924) {
+        lmsm_i_ssub(our_little_machine);
+    }else if (instruction == 925) {
+        lmsm_i_smax(our_little_machine);
+    }else if (instruction == 926) {
+        lmsm_i_smin(our_little_machine);
+    }else if (instruction == 927) {
+        lmsm_i_smul(our_little_machine);
+    }else if (instruction == 928) {
+        lmsm_i_sdiv(our_little_machine);
     }else {
         our_little_machine->error_code = ERROR_UNKNOWN_INSTRUCTION;
         our_little_machine->status = STATUS_HALTED;
