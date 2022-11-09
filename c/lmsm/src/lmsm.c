@@ -10,13 +10,24 @@
 //======================================================
 
 void lmsm_i_call(lmsm *our_little_machine) {
-    lmsm_stack *current =our_little_machine->accumulator;
-    our_little_machine->accumulator=our_little_machine->accumulator->next;
-    //lmsm_stack *current_pro =our_little_machine->call_stack;
-    our_little_machine->program_counter=our_little_machine->accumulator;
+    our_little_machine->program_counter=our_little_machine->accumulator->value;
+    lmsm_stack *current1 =our_little_machine->accumulator;
+    if(current1->next){
+        lmsm_stack *new = malloc(sizeof(lmsm_stack));
+        new->value = current1->next->value;
+        new->next=current1->next->next;
+        our_little_machine->accumulator=new;
+    }else{
+        our_little_machine->status=STATUS_HALTED;
+        our_little_machine->error_code=ERROR_EMPTY_STACK;
+    }
 
 
-    free(current);
+    lmsm_stack *current =our_little_machine->call_stack;
+    lmsm_stack *new = malloc(sizeof(lmsm_stack));
+    new->value =our_little_machine->program_counter;
+    new->next=current;
+    our_little_machine->accumulator=new;
 
 }
 
