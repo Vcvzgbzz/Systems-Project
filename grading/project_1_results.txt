@@ -31,7 +31,7 @@ Running main() from /home/parallels/autograder/csci-366-fall2022/grading/scripts
 [ RUN      ] lmsm_machine_suite.test_halt_instruction
 [       OK ] lmsm_machine_suite.test_halt_instruction (0 ms)
 [ RUN      ] lmsm_machine_suite.test_load_immediate_instruction
-[       OK ] lmsm_machine_suite.test_load_immediate_instruction (1 ms)
+[       OK ] lmsm_machine_suite.test_load_immediate_instruction (0 ms)
 [ RUN      ] lmsm_machine_suite.test_push_instruction
 [       OK ] lmsm_machine_suite.test_push_instruction (0 ms)
 [ RUN      ] lmsm_machine_suite.test_pop_instruction_removes_top_of_stack
@@ -85,15 +85,15 @@ Expected equality of these values:
   the_machine->accumulator->value
     Which is: 22
   0
-[  FAILED  ] lmsm_machine_suite.test_return_instruction_returns_to_address_on_top_of_call_stack (1 ms)
+[  FAILED  ] lmsm_machine_suite.test_return_instruction_returns_to_address_on_top_of_call_stack (0 ms)
 [ RUN      ] lmsm_machine_suite.step_steps_to_the_next_instruction_and_executes_current
 [       OK ] lmsm_machine_suite.step_steps_to_the_next_instruction_and_executes_current (0 ms)
 [ RUN      ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted
 [       OK ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted (0 ms)
-[----------] 39 tests from lmsm_machine_suite (2 ms total)
+[----------] 39 tests from lmsm_machine_suite (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 39 tests from 1 test suite ran. (2 ms total)
+[==========] 39 tests from 1 test suite ran. (0 ms total)
 [  PASSED  ] 37 tests.
 [  FAILED  ] 2 tests, listed below:
 [  FAILED  ] lmsm_machine_suite.test_call_instruction_pushes_next_address_onto_stack
