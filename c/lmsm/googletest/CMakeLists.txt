@@ -1,4 +1,5 @@
-# 'Google_test' is the subproject name
+set(CMAKE_CXX_STANDARD 11)
+cmake_minimum_required(VERSION 3.16)
 project(Google_tests)
 
 # 'lib' is the folder with Google Test sources

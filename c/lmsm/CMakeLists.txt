@@ -1,6 +1,6 @@
 set(CMAKE_CXX_STANDARD 11)
 cmake_minimum_required(VERSION 3.16)
-project(lmsm C)
+project(lmsm_tests)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
